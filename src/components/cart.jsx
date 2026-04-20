@@ -5,16 +5,16 @@ const Cart = () => {
     const [cart, setCart] = useState({ items: [], totalPrice: 0 });
 
     // Fetch cart on component mount
+    const fetchCart = async () => {
+        try {
+            const res = await getcart(); // assuming you have a GET /cart route
+            setCart(res.data);
+            console.log(res.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
     useEffect(() => {
-        const fetchCart = async () => {
-            try {
-                const res = await getcart(); // assuming you have a GET /cart route
-                setCart(res.data);
-                console.log(res.data);
-            } catch (err) {
-                console.error(err);
-            }
-        };
 
         fetchCart();
     }, []);
@@ -24,6 +24,7 @@ const Cart = () => {
         try {
             const updatedCart = await patchcart(prod_id);
             setCart(updatedCart.data); // update state
+            fetchCart(); // refetch cart to get updated data
         } catch (err) {
             console.error(err);
         }
@@ -33,7 +34,8 @@ const Cart = () => {
     const handleDelete = async (prod_id) => {
         try {
             const updatedCart = await deleteitem(prod_id);
-            setCart(updatedCart.data); // update state
+            setCart(updatedCart.data); 
+            fetchCart();// update state
         } catch (err) {
             console.error(err);
         }
@@ -44,6 +46,7 @@ const Cart = () => {
         try {
             const updatedCart = await addtocart(prod_id);
             setCart(updatedCart.data);
+            fetchCart();
         } catch (err) {
             console.error(err);
         }

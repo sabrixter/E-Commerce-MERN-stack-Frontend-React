@@ -55,7 +55,7 @@ const Allproducts = () => {
     //if no products were found or fetched
     if (!products || products.length === 0) {
         return (
-            <p className="body-large-emphasized" style={{ color: '#333', fontFamily: "'Michroma', sans-serif", color: '#6200ee' }}>
+            <p className="body-large-emphasized" style={{ fontFamily: "'Michroma', sans-serif", color: '#6200ee' }}>
                 No products found. :(
             </p>
         );
