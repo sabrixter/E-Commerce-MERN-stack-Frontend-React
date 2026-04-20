@@ -2,11 +2,13 @@ import { product_details, addtocart } from "../api";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useCart } from "../cartContext"; // if you want to use context instead of local state
 
 
 const Details = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const { addItem } = useCart(); // using context for cart actions
 
     useEffect(() => {
         product_details(id)
@@ -24,10 +26,7 @@ const Details = () => {
 
     const handleAddToCart = async (productId) => {
         try {
-            const response = await addtocart(productId);
-            console.log('Product added:', response);
-            // Optionally update local cart state
-            // setCart(response.cart)
+            addItem(productId); // using context function to add item
         } catch (error) {
             console.error('Failed to add product to cart', error);
         }

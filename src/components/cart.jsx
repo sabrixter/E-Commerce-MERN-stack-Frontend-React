@@ -1,30 +1,14 @@
 import { getcart, patchcart, deleteitem, addtocart } from '../api'; // adjust path as needed
 import { useState, useEffect } from 'react';
+import { useCart } from '../cartContext'; // if you want to use context instead of local state
 
 const Cart = () => {
-    const [cart, setCart] = useState({ items: [], totalPrice: 0 });
-
-    // Fetch cart on component mount
-    const fetchCart = async () => {
-        try {
-            const res = await getcart(); // assuming you have a GET /cart route
-            setCart(res.data);
-            console.log(res.data);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-    useEffect(() => {
-
-        fetchCart();
-    }, []);
+    const { cart, addItem, decreaseItem, deleteItem } = useCart(); // using context for cart state and actions
 
     // Decrease quantity
     const handleDecrease = async (prod_id) => {
         try {
-            const updatedCart = await patchcart(prod_id);
-            setCart(updatedCart.data); // update state
-            fetchCart(); // refetch cart to get updated data
+            decreaseItem(prod_id);
         } catch (err) {
             console.error(err);
         }
@@ -33,9 +17,7 @@ const Cart = () => {
     // Delete item
     const handleDelete = async (prod_id) => {
         try {
-            const updatedCart = await deleteitem(prod_id);
-            setCart(updatedCart.data); 
-            fetchCart();// update state
+            deleteItem(prod_id);
         } catch (err) {
             console.error(err);
         }
@@ -44,9 +26,7 @@ const Cart = () => {
     //adding a new product
     const handleIncrease = async (prod_id) => {
         try {
-            const updatedCart = await addtocart(prod_id);
-            setCart(updatedCart.data);
-            fetchCart();
+            addItem(prod_id);
         } catch (err) {
             console.error(err);
         }
@@ -88,22 +68,7 @@ const Cart = () => {
                                 <button className={buttonStyle} onClick={() => handleIncrease(item.product._id)}>+</button>
                                 <button className={buttonStyle} onClick={() => handleDelete(item.product._id)}>Delete</button>
                             </div>
-                        </li>
-                        // <div key={item.product._id} className="d-flex gap-3 mb-3">
-
-                        //     <img
-                        //         src={item.product.image}
-                        //         alt={item.product.product_name}
-                        //         width="60"
-                        //     />
-
-                        //     <div>
-                        //         <h6>{item.product.product_name}</h6>
-                        //         <p>₹{item.product.price}</p>
-                        //         <p>Qty: {item.quantity}</p>
-                        //     </div>
-
-                        // </div>
+                        </li>                        
                     ))}
                 </ul>
             )}
