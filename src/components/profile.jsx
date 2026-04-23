@@ -1,4 +1,4 @@
-import { profile, addproduct, getproducts, getorders } from '../api';
+import { profile, addproduct, getproducts, getorders, getEarnings } from '../api';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
@@ -13,7 +13,6 @@ const Profile = () => {
       try {
         const res = await profile();
         setUser(res.data);
-        console.log(res.data);
       } catch (error) {
         console.error('failed to fetch products', error)
       }
@@ -40,7 +39,6 @@ const Profile = () => {
       try {
         const res = await getproducts();
         setProducts(res.data);
-        console.log(res.data)
       } catch (error) {
         console.log('no products found', error)
       }
@@ -115,6 +113,21 @@ const Profile = () => {
     return <div className="text-center mt-5">Loading profile...</div>;
   }
 
+  const [earnings, setEarnings] = useState(0);
+  useEffect(() => {
+    const fetchEarnings = async () => {
+      try {
+        const res = await getEarnings();
+        setEarnings(res.data.totalEarnings);
+      } catch (error) {
+        console.error('Failed to fetch earnings', error);
+      }
+    };
+
+    fetchEarnings();
+  }, []);
+
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4">My Profile</h2>
@@ -188,13 +201,14 @@ const Profile = () => {
             <h1 className="accordion-header">
               <button className="accordion-button d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#earnings" aria-expanded="true" aria-controls="collapseOne">
                 <span><strong>Earnings</strong></span>
+                
                 <i className="bi bi-chevron-down"></i>
               </button>
             </h1>
 
             <div id="earnings" className="accordion-collapse collapse show">
               <div className="accordion-body py-3">
-                <h3 className="text-success">₹0.00</h3>
+                <h3 className="text-success">₹{earnings.toFixed(2)}</h3>
               </div>
             </div>
           </div>

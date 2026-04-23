@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({baseURL: 'https://e-commerce-mern-stack-ma46.onrender.com/api'});
+// const API = axios.create({baseURL: 'http://localhost:5000/api'});
 
 API.interceptors.request.use((req) => {
     if(localStorage.getItem('token')){
@@ -20,6 +21,7 @@ export const addproduct = (formData) => API.post('/product/add_prod', formData);
 export const profile = () => API.get('/profile');
 export const getorders = () => API.get('/profile/orders');
 export const getproducts = () => API.get('/profile/products');
+export const getEarnings = () => API.get('/profile/earnings');
 
 export const getcart = () => API.get('/cart');
 export const addtocart = (prod_id) => API.post(`/cart/add/${prod_id}`);
