@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Allproducts from './components/home.jsx';
 import Navbar from './components/navbar.jsx'
 import Auth from './components/auth.jsx'
@@ -20,6 +21,7 @@ function App() {
           <Route path ="/product/:id" element={<ProductDetails/>} />
           <Route path="/checkout/create-order" element={<CreateOrder/>} />
       </Routes>
+      <Analytics />
     </Router>
   );
 }
